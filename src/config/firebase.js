@@ -1,5 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import "firebase/compat/storage";
 
 
 let firebaseConfig = {
@@ -15,8 +17,8 @@ let firebaseApp = firebase.initializeApp(firebaseConfig);
 
 export let firebaseAuth = firebaseApp.auth();
 export  let provider =new firebase.auth.GoogleAuthProvider();
-//export let firebaseStorage = firebaseApp.storage();
-//export let firebaseDB = firebaseApp.firestore();
+export let firebaseStorage = firebaseApp.storage();
+export let firebaseDB = firebaseApp.firestore();
 //export let timeStamp = firebase.firestore.FieldValue.serverTimestamp;
 
 
