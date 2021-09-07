@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { firebaseAuth } from "../config/firebase";
+import { firebaseAuth ,provider} from "../config/firebase";
 export const AuthContext = React.createContext();
 
 export function AuthProvider({ children }) {
@@ -9,6 +9,14 @@ export function AuthProvider({ children }) {
     return firebaseAuth.signInWithEmailAndPassword(email, password);
   }
 
+  function loginWithGoogle(){
+
+   
+   return  firebaseAuth.signInWithPopup(provider);
+}
+
+
+
   function signOut() {
     return firebaseAuth.signOut();
   }
@@ -16,6 +24,8 @@ export function AuthProvider({ children }) {
   function signUp(email, password) {
     return firebaseAuth.createUserWithEmailAndPassword(email , password);
   }
+
+
 
   useEffect(() => {
     // event attach kra hai
@@ -32,6 +42,8 @@ export function AuthProvider({ children }) {
     signOut: signOut,
     login: login,
     signUp: signUp,
+    loginWithGoogle:loginWithGoogle,
+
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

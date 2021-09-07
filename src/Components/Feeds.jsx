@@ -1,24 +1,25 @@
-// import React, { useContext, useEffect, useState } from "react";
-// import { AuthContext } from "../context/AuthProvider";
-// import { Button } from "@material-ui/core";
-// // import PhotoCamera from "@material-ui/icons/PhotoCamera";
-// import { firebaseDB, firebaseStorage, timeStamp } from "../config/firebase";
+ import React, { useContext, useEffect, useState } from "react";
+ import { AuthContext } from "../context/AuthProvider";
+ //import { Button } from "@material-ui/core";
+ //import PhotoCamera from "@material-ui/icons/PhotoCamera";
+ import { firebaseDB, firebaseStorage, timeStamp } from "../config/firebase";
 // import { uuid } from "uuidv4";
 //import VideoPost from "./VideoPost";
 const Feeds = (props) => {
-  // const { signOut } = useContext(AuthContext);
+   const { signOut } = useContext(AuthContext);
   // const [videoFile, setVideoFile] = useState(null);
   // const [posts, setPosts] = useState([]);
   // const [uploadVideoError, setUploadVideoError] = useState("");
   // const { currentUser } = useContext(AuthContext);
-  // const handleLogout = async () => {
-  //   try {
-  //     await signOut();
-  //     props.history.push("/login");
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+   const handleLogout = async () => {
+     try {
+      await signOut();
+      props.history.push("/login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // const handleInputFile = (e) => {
   //   let file = e.target.files[0];
   //   setVideoFile(file);
@@ -113,9 +114,10 @@ const Feeds = (props) => {
   //     });
   // }, []); //component did mount !!
 
-  // return (
-  //   <div>
-  //     <button onClick={handleLogout}>Logout</button>
+   return (
+    <div>
+       <button onClick={handleLogout}>Logout</button>
+{/*   
   //     <div className="uploadVideo">
   //       <div>
   //         <input type="file" onChange={handleInputFile} />
@@ -137,12 +139,14 @@ const Feeds = (props) => {
   //         return <VideoPost key={postObj.pid} postObj={postObj}></VideoPost>;
   //       })}
   //     </div>
-  //   </div>
-  // );
+  // 
+      */}
 
-  return (
-    <h1>Feeds page</h1>
-  )
+      </div>
+
+  );
+
+  
 };
 
 export default Feeds;

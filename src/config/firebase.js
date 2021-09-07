@@ -1,4 +1,6 @@
-import firebase from "firebase/compat";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+
 
 let firebaseConfig = {
   apiKey: "AIzaSyALiTbZsVU1xIT_xVSqbnkdzpkip_KCVjU",
@@ -10,10 +12,17 @@ let firebaseConfig = {
 };
 
 let firebaseApp = firebase.initializeApp(firebaseConfig);
+
 export let firebaseAuth = firebaseApp.auth();
-export let firebaseStorage = firebaseApp.storage();
-export let firebaseDB = firebaseApp.firestore();
-export let timeStamp = firebase.firestore.FieldValue.serverTimestamp;
+export  let provider =new firebase.auth.GoogleAuthProvider();
+//export let firebaseStorage = firebaseApp.storage();
+//export let firebaseDB = firebaseApp.firestore();
+//export let timeStamp = firebase.firestore.FieldValue.serverTimestamp;
+
+
+
+
+
 
 
 
