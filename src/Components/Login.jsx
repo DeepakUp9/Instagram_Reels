@@ -1,7 +1,9 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
-import logo from "../logo.png";
+import logo from "./logo.png";
+import "./Login.css"
+import photo   from "./app-feautures.png";
 
 
 
@@ -23,9 +25,10 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  let { login,loginWithGoogle } = useContext(AuthContext);
+  let { login,loginWithGoogle,user } = useContext(AuthContext);
   
-
+    
+    
   const handleLogin = async (e) => {
     //   email , password
     try {
@@ -88,14 +91,19 @@ const Login = (props) => {
 
   return (
     <div>
+
+
       <Container>
         <Grid container spacing={2} style={{justifyContent:"space-around"}}>
           {/* Carousel */}
           <Grid item sm={5}>
-            <Paper className={classes.carousal}>Carousel</Paper>
+           
+<div class="col-md-6 ">
+					<img src={photo} alt="[+]" />
+				</div>
           </Grid>
           <Grid item sm={3}>
-            <Card variant="outlined" className={classes.mb}>
+            <Card variant="outlined" className={classes.mb} style={{width:"400px",height:"350px",marginLeft:"-60px",marginTop:"10px"}}>
               <CardMedia
                 image={logo}
                 style={{ height: "5rem", backgroundSize: "contain" }}
@@ -131,7 +139,7 @@ const Login = (props) => {
                 </Button>
               </CardActions>
             </Card>
-            <Card variant="outlined" className={classes.padding}>
+            <Card variant="outlined" className={classes.padding} style={{width:"400px",marginLeft:"-60px"}}>
               <Typography style={{ textAlign: "center" }}>
                 Don't have an account ?
                 <Button variant="contained" color="primary">
@@ -146,11 +154,28 @@ const Login = (props) => {
       </Container>
        <h2 style={{ color: "red" }}>{message}</h2>{" "} 
 
-
+{/* 
     <button  onClick={ loginwithGooglesignIn}
 
     
-    className="btn btn-primary m-4">Login With google </button>
+class="btn-text">Login With google </button> */}
+
+
+<div class="google-btn btn-google">
+  <div class="google-icon-wrapper">
+    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+  </div>
+  <p class="btn-text">
+    <button class="btn-logo"  onClick={ loginwithGooglesignIn}
+
+    
+><b>Login With google </b></button>
+</p>
+</div>
+
+
+
+
 
 
       {/* <h1>Login Page</h1>

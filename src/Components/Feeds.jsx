@@ -1,152 +1,169 @@
- import React, { useContext, useEffect, useState } from "react";
- import { AuthContext } from "../context/AuthProvider";
- //import { Button } from "@material-ui/core";
- //import PhotoCamera from "@material-ui/icons/PhotoCamera";
- import { firebaseDB, firebaseStorage, timeStamp } from "../config/firebase";
-// import { uuid } from "uuidv4";
-//import VideoPost from "./VideoPost";
-const Feeds = (props) => {
-   const { signOut } = useContext(AuthContext);
-  // const [videoFile, setVideoFile] = useState(null);
-  // const [posts, setPosts] = useState([]);
-  // const [uploadVideoError, setUploadVideoError] = useState("");
-  // const { currentUser } = useContext(AuthContext);
-   const handleLogout = async () => {
-     try {
-      await signOut();
-      props.history.push("/login");
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
-  // const handleInputFile = (e) => {
-  //   let file = e.target.files[0];
-  //   setVideoFile(file);
-  // };
-  // const handleUploadFile = async () => {
-  //   try {
-  //     // if (videoFile.size / 1000000 > 5) {
-  //     //   setUploadVideoError("Selected File Exceeds 5MB cannot upload !");
-  //     //   return;
-  //     // }
+import React, { useContext, useEffect, useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Button } from "@material-ui/core";
+import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import {firebaseAuth, firebaseStorage, firebaseDB} from "../config/firebase";
 
-  //     // upload video in firebase storage
-  //     let uid = currentUser.uid;
-  //     const uploadVideoObject = firebaseStorage
-  //       .ref(`/profilePhotos/${uid}/${Date.now()}.mp4`)
-  //       .put(videoFile);
-  //     uploadVideoObject.on("state_changed", fun1, fun2, fun3);
-  //     function fun1(snapshot) {
-  //       // bytes transferred
-  //       // totoal bytes
-  //       let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       console.log(progress);
-  //     }
-  //     // if indicates a error !!
-  //     function fun2(error) {
-  //       console.log(error);
-  //     }
-  //     // it indicates success of the upload !!
-  //     async function fun3() {
-  //       let videoUrl = await uploadVideoObject.snapshot.ref.getDownloadURL();
-  //       console.log(videoUrl);
-  //       let pid = uuid(); // unique id
-  //       await firebaseDB.collection("posts").doc(pid).set({
-  //         pid: pid,
-  //         uid: uid,
-  //         comments: [],
-  //         likes: [],
-  //         videoLink: videoUrl,
-  //         createdAt: timeStamp(),
-  //       });
-  //       let doc = await firebaseDB.collection("users").doc(uid).get();
-  //       let document = doc.data();
-  //       document.postsCreated.push(pid);
-  //       await firebaseDB.collection("users").doc(uid).set(document);
-  //       setUploadVideoError("");
-  //     }
-  //   } catch (err) {}
-  // };
+import VideoCard from "./videoCard"
 
-  // let conditionObject = {
-  //   root: null, //observe from whole page
-  //   threshold: "0.8", //80%
-  // };
 
-  // function cb(entries) {
-  //   console.log(entries);
-  //   entries.forEach((entry) => {
-  //     let child = entry.target.children[0];
-  //     // play(); => async
-  //     // pause(); => sync
+import { AuthContext } from '../context/AuthProvider';
 
-  //     child.play().then(function () {
-  //       if (entry.isIntersecting == false) {
-  //         child.pause();
-  //       }
-  //     });
-  //   });
-  // }
 
-  // useEffect(() => {
-  //   // code which will run when the component loads
-  //   let observerObject = new IntersectionObserver(cb, conditionObject);
-  //   let elements = document.querySelectorAll(".video-container");
+import "./home.css"
 
-  //   elements.forEach((el) => {
-  //     observerObject.observe(el); //Intersection Observer starts observing each video element
-  //   });
-  // }, [posts]);
 
-  // useEffect(() => {
-  //   //GET ALL THE POSTS
 
-  //   //onSnapshot => listens for changes on the collection
-  //   firebaseDB
-  //     .collection("posts")
-  //     .orderBy("createdAt", "desc")
-  //     .onSnapshot((snapshot) => {
-  //       let allPosts = snapshot.docs.map((doc) => {
-  //         return doc.data();
-  //       });
-  //       setPosts(allPosts);
-  //     });
-  // }, []); //component did mount !!
+const Feeds = () => {
 
-   return (
-    <div>
-       <button onClick={handleLogout}>Logout</button>
-{/*   
-  //     <div className="uploadVideo">
-  //       <div>
-  //         <input type="file" onChange={handleInputFile} />
-  //         <label>
-  //           <Button
-  //             onClick={handleUploadFile}
-  //             variant="contained"
-  //             color="secondary"
-  //             startIcon={<PhotoCamera></PhotoCamera>}
-  //           >
-  //             Upload
-  //           </Button>
-  //         </label>
-  //       </div>
-  //       <p>{uploadVideoError}</p>
-  //     </div>
-  //     <div className="feeds-video-list" style={{ margin: "auto" }}>
-  //       {posts.map((postObj) => {
-  //         return <VideoPost key={postObj.pid} postObj={postObj}></VideoPost>;
-  //       })}
-  //     </div>
-  // 
-      */}
+    let{ user} = useContext(AuthContext);
+    let [posts,setPosts] =useState([]);
 
-      </div>
+    console.log(user,"user");
 
-  );
+    useEffect(()=>{
+        
+       let unsub = firebaseDB.collection("posts").onSnapshot((querySnapshot)=>{
+
+            let docArr=querySnapshot.docs;
+
+            let arr=[];
+
+            for(let i=0; i<docArr.length;i++){
+                arr.push({
+                    id: docArr[i].id,
+                    ...docArr[i].data(),
+                });
+            }
+
+            setPosts(arr);
+        });
+
+        return ()=>{
+            unsub();
+        }
+
+
+    },[]);
+
 
   
-};
+    return (
+       
+        <>
 
+
+
+
+    <div className="video-container">
+       
+       {posts.map((el)=>{
+
+           return  <VideoCard  key={el.id} data={el} />;
+       })}
+        
+
+    </div>
+
+
+    <button  className="home-logout-btn"
+    
+    onClick={()=>{
+
+        firebaseAuth.signOut()
+
+   }}>LogOut</button>
+
+
+
+
+
+
+
+
+
+
+
+   <input type="file"   id="filePicker" style={{visibility:"hidden"}}
+   
+   
+   onClick={(e)=>{
+    e.currentTarget.value=null
+}}
+    
+
+    onChange={(e)=>{
+
+        let videoObj=e.currentTarget.files[0];
+
+        let {displayName,size,type}=videoObj;
+
+        size=size/1000000
+
+        if(size>60){
+            alert("file size exceeds more 10mb");
+            return;
+        }
+
+        type=type.split("/")[0];
+
+        if(type!=="video"){
+            alert("please upload only video files");
+            return;
+        }
+
+       let uploadTask =firebaseStorage.ref(`posts/${user.uid}/${Date.now() + "-"+ displayName }`).put(videoObj);
+
+       function fun1(snapshot) {
+        // bytes transferred
+        // totoal bytes
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        
+        <>
+              <div>{progress}</div>
+            <progress value={progress} max="100"  style={{background : "red"}}>10%</progress>
+        </>
+       
+        console.log(progress);
+      }
+       uploadTask.on("state_changed" ,fun1, null,()=>{
+
+        
+        uploadTask.snapshot.ref.getDownloadURL().then((url)=>{
+            console.log(url);
+
+
+            firebaseDB.collection("posts")
+            .add({ name : user.displayName ,url,likes:[],comments:[]});
+
+
+
+        });
+
+       })
+
+
+}}
+   
+   
+        />
+
+         
+
+
+    
+          <label  class="input-file-label"  htmlFor="filePicker" >
+
+{<PhotoCamera style={{marginTop:"3px"} }></PhotoCamera>}
+<strong style={{marginTop:"4px"}} >UPLOAD</strong> 
+</label>
+
+
+
+    </>
+   
+   );
+}
+ 
 export default Feeds;
